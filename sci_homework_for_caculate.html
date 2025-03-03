@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sci homework</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .display {
+            width: 100%;
+            height: 50px;
+            margin-bottom: 10px;
+            background-color: #222;
+            color: #fff;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .button {
+            width: 100%;
+            height: 50px;
+            background-color: #f0f0f0;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #ddd;
+        }
+        .button.operator {
+            background-color: #ff9500;
+            color: #fff;
+        }
+        .button.operator:hover {
+            background-color: #e08900;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="button" onclick="appendNumber('7')">7</button>
+            <button class="button" onclick="appendNumber('8')">8</button>
+            <button class="button" onclick="appendNumber('9')">9</button>
+            <button class="button operator" onclick="setOperation('/')">/</button>
+            <button class="button" onclick="calculateFunction('sin')">sin</button>
+            <button class="button" onclick="appendNumber('4')">4</button>
+            <button class="button" onclick="appendNumber('5')">5</button>
+            <button class="button" onclick="appendNumber('6')">6</button>
+            <button class="button operator" onclick="setOperation('*')">*</button>
+            <button class="button" onclick="calculateFunction('cos')">cos</button>
+            <button class="button" onclick="appendNumber('1')">1</button>
+            <button class="button" onclick="appendNumber('2')">2</button>
+            <button class="button" onclick="appendNumber('3')">3</button>
+            <button class="button operator" onclick="setOperation('-')">-</button>
+            <button class="button" onclick="calculateFunction('tan')">tan</button>
+            <button class="button" onclick="appendNumber('0')">0</button>
+            <button class="button" onclick="appendNumber('.')">.</button>
+            <button class="button" onclick="calculate()">=</button>
+            <button class="button operator" onclick="setOperation('+')">+</button>
+            <button class="button" onclick="calculateFunction('sqrt')">sqrt</button>
+            <button class="button" onclick="clearDisplay()">C</button>
+            <button class="button" onclick="deleteLast()">DEL</button>
+            <button class="button" onclick="appendNumber('(')">(</button>
+            <button class="button" onclick="appendNumber(')')">)</button>
+            <button class="button" onclick="calculateFunction('log')">log</button>
+            <button class="button" onclick="calculateFunction('fact')">!</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '';
+        let currentOperation = null;
+        let previousInput = '';
+
+        const display = document.getElementById('display');
+
+        function appendNumber(number) {
+            currentInput += number;
+            updateDisplay();
+        }
+
+        function setOperation(operation) {
+            if (currentOperation) {
+                calculate();
+            }
+            currentOperation = operation;
+            previousInput = currentInput;
+            currentInput = '';
+        }
+
+        function calculate() {
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+
+            switch (currentOperation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = result.toString();
+            currentOperation = null;
+            previousInput = '';
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            currentOperation = null;
+            previousInput = '';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            currentInput = currentInput.slice(0, -1);
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            display.textContent = currentInput || '0';
+        }
+
+        function calculateFunction(func) {
+            let result;
+            const num = parseFloat(currentInput);
+
+            switch (func) {
+                case 'sin':
+                    result = Math.sin(num);
+                    break;
+                case 'cos':
+                    result = Math.cos(num);
+                    break;
+                case 'tan':
+                    result = Math.tan(num);
+                    break;
+                case 'sqrt':
+                    result = Math.sqrt(num);
+                    break;
+                case 'log':
+                    result = Math.log(num);
+                    break;
+                case 'fact':
+                    result = factorial(num);
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = result.toString();
+            updateDisplay();
+        }
+
+        function factorial(n) {
+            if (n === 0 || n === 1) {
+                return 1;
+            }
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
